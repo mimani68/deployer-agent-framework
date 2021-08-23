@@ -44,11 +44,11 @@ openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ### Encrypt message with public key
 
 ```bash
-echo "salam" | openssl rsautl -encrypt -inkey public.pem -pubin -in - -out top_secret.enc
+echo "Hello" | openssl rsautl -encrypt -inkey public.pem -pubin -in - | base64
 ```
 
 ### Decrypt the file using a private key
 
 ```bash
-openssl rsautl -decrypt -inkey private.pem -in top_secret.enc > decrypted_message.txt
+openssl rsautl -decrypt -inkey private.pem -in top_secret.enc
 ```
