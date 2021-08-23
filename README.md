@@ -12,13 +12,6 @@ export FLASK_ENV=development
 flask run --host=0.0.0.0 --port=3000
 ```
 
-## Usage
-
-```bash
-curl localhost:3000/?cmd=hello
-curl localhost:3000/?cmd=deploy&param=12&password=123
-```
-
 ## Certs
 
 ### Generate a 2048 bit RSA Key
@@ -53,11 +46,14 @@ echo "{\"accessToken\":\"8X20xd23-X2-l0P5g5\"}" | openssl rsautl -encrypt -inkey
 cat top_secret.enc | base64 --decode - | openssl rsautl -decrypt -inkey private.pem -in -
 ```
 
-## Test
+## Usage
 
 Send request with `cURL`
 
 ```bash
 msg=`echo "{\"accessToken\":\"8X-i2x2t3M-X2-l0P5g5\"}" | openssl rsautl -encrypt -inkey public.pem -pubin -in - | base64`
-curl -XPOST localhost:3000 --data "$msg"
+```
+And the send request
+```bash
+curl -XPOST localhost:3000/?cmd=hello --data "$msg"
 ```

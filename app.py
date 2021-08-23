@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
-import base64
-import os
-import re
 import subprocess
 import json
+import re
+import os
 from flask import Flask, request
 
 SERVER_ACCESS_TOKEN = "8X-i2x2t3M-X2-l0P5g5"
@@ -22,8 +19,10 @@ def decrypt_public_key(encrypted_message):
 app = Flask(__name__)
 
 # 
-# curl localhost:3000/?cmd=hello
-# curl localhost:3000/?cmd=deploy
+# must send "SERVER_ACCESS_TOKEN" that encypted with rsa pair keys
+# 
+# curl localhost:3000/?cmd=hello --data "fjfdfighfey8gynhe8rt87eyt"
+# curl localhost:3000/?cmd=deploy --data "fjfdfighfey8gynhe8rt87eyt"
 # 
 @app.route("/", methods=['POST'])
 def run_command():
@@ -35,18 +34,17 @@ def run_command():
   a = json.loads(value)
   if a["accessToken"] != SERVER_ACCESS_TOKEN :
     return "Unauthorized request"
-  return "Welcome"
 
   # 
   # Run command
   # 
-  # scriptInpit = request.args.get('cmd')
-  # a = subprocess.check_output(['ls', "./scripts"])
-  # a = a.split('\n')
-  # for executableFile in a:
-  #   x = re.search("{}.sh".format(scriptInpit), executableFile)
-  #   if x >= 0 :
-  #     os.system("./scripts/" + scriptInpit + ".sh")
-  #     return "DONE"
-  #   else:
-  #     return "FILAED"
+  scriptInpit = request.args.get('cmd')
+  a = subprocess.check_output(['ls', "./scripts"])
+  a = a.split('\n')
+  for executableFile in a:
+    x = re.search("{}.sh".format(scriptInpit), executableFile)
+    if x >= 0 :
+      os.system("./scripts/" + scriptInpit + ".sh")
+      return "DONE"
+    else:
+      return "FILAED"
