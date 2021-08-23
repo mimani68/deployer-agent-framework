@@ -6,23 +6,18 @@ import base64
 import os
 import re
 import subprocess
+import json
 from flask import Flask, request
 
+SERVER_ACCESS_TOKEN = "8X-i2x2t3M-X2-l0P5g5"
 
-def encrypt_private_key(a_message, private_key):
-  encryptor = PKCS1_OAEP.new(private_key)
-  encrypted_msg = encryptor.encrypt(a_message)
-  print(encrypted_msg)
-  encoded_encrypted_msg = base64.b64encode(encrypted_msg)
-  print(encoded_encrypted_msg)
-  return encoded_encrypted_msg
+def encrypt_private_key(message):
+  return subprocess.check_output(["bash", "-c", "echo {} | openssl rsautl -encrypt -inkey ./certs/public.pem -pubin -in - | base64 > top_secret.enc".format(message)])
 
-def decrypt_public_key(encoded_encrypted_msg, public_key):
-  encryptor = PKCS1_OAEP.new(public_key)
-  decoded_encrypted_msg = base64.b64decode(encoded_encrypted_msg)
-  # print(decoded_encrypted_msg)
-  decoded_decrypted_msg = encryptor.decrypt(decoded_encrypted_msg)
-  return decoded_decrypted_msg
+def decrypt_public_key(encrypted_message):
+  print(encrypted_message)
+  subprocess.check_output(["bash", "-c", "echo '{}' > top_secret.enc".format(encrypted_message)])
+  return subprocess.check_output(["bash", "-c", "cat top_secret.enc | base64 --decode - | openssl rsautl -decrypt -inkey ./certs/private.pem -in -"])
 
 app = Flask(__name__)
 
@@ -32,12 +27,19 @@ app = Flask(__name__)
 # 
 @app.route("/", methods=['POST'])
 def run_command():
+  # 
+  # Recive encrypted message
+  # 
   encrypted_base64_payload = request.get_data()
-  f = open("certs/private.pem", "r")
-  print(f.read())
-  # print(encrypted_base64_payload.decode('utf-8'))
-  return decrypt_public_key(encrypted_base64_payload, f.read())
+  value = decrypt_public_key(encrypted_base64_payload)
+  a = json.loads(value)
+  if a["accessToken"] != SERVER_ACCESS_TOKEN :
+    return "Unauthorized request"
+  return "Welcome"
 
+  # 
+  # Run command
+  # 
   # scriptInpit = request.args.get('cmd')
   # a = subprocess.check_output(['ls', "./scripts"])
   # a = a.split('\n')

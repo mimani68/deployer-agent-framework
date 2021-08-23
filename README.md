@@ -44,11 +44,20 @@ openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ### Encrypt message with public key
 
 ```bash
-echo "Hello" | openssl rsautl -encrypt -inkey public.pem -pubin -in - | base64
+echo "{\"accessToken\":\"8X20xd23-X2-l0P5g5\"}" | openssl rsautl -encrypt -inkey public.pem -pubin -in - | base64 > top_secret.enc
 ```
 
 ### Decrypt the file using a private key
 
 ```bash
-openssl rsautl -decrypt -inkey private.pem -in top_secret.enc
+cat top_secret.enc | base64 --decode - | openssl rsautl -decrypt -inkey private.pem -in -
+```
+
+## Test
+
+Send request with `cURL`
+
+```bash
+msg=`echo "{\"accessToken\":\"8X-i2x2t3M-X2-l0P5g5\"}" | openssl rsautl -encrypt -inkey public.pem -pubin -in - | base64`
+curl -XPOST localhost:3000 --data "$msg"
 ```
