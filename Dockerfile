@@ -2,7 +2,7 @@ FROM python:2.7-slim
 
 WORKDIR /app
 
-RUN apt update; apt install git curl docker.io
+RUN apt update; apt install -y git curl docker.io
 
 ADD requriments.txt /app
 
