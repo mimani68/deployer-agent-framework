@@ -9,7 +9,7 @@ pip install Flask
 ```bash
 export FLASK_APP=hello
 export FLASK_ENV=development
-flask run --host=0.0.0.0 --port=3000
+flask run --host=0.0.0.0 --port=27514
 ```
 
 ## Certs
@@ -48,6 +48,8 @@ cat top_secret.enc | base64 --decode - | openssl rsautl -decrypt -inkey private.
 
 ## Usage
 
+### Standalone
+
 Send request with `cURL`
 
 ```bash
@@ -55,5 +57,19 @@ msg=`echo "{\"accessToken\":\"8X-i2x2t3M-X2-l0P5g5\"}" | openssl rsautl -encrypt
 ```
 And the send request
 ```bash
-curl -XPOST localhost:3000/?cmd=hello --data "$msg"
+curl -XPOST localhost:27514/?cmd=hello --data "$msg"
+```
+
+### Dockerized
+
+```bash
+docker run --rm \
+--name dep \
+-e NEED_ACCESS_TOKEN="false" \
+-e SERVER_ACCESS_TOKEN="123" \
+-v ${PWD}/scripts:/app/scripts \
+-v ${PWD}/certs:/app/certs \
+-v ${PWD}/logs:/app/logs \
+-p 27514:27514 \
+deployer:1.0.0
 ```

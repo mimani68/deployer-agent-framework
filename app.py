@@ -6,7 +6,8 @@ import re
 import os
 from flask import Flask, request
 
-SERVER_ACCESS_TOKEN = "8X-i2x2t3M-X2-l0P5g5"
+SERVER_ACCESS_TOKEN = os.getenv('SERVER_ACCESS_TOKEN')
+NEED_ACCESS_TOKEN = os.getenv('NEED_ACCESS_TOKEN') == 'true'
 
 def encrypt_private_key(message):
   return subprocess.check_output(["bash", "-c", "echo {} | openssl rsautl -encrypt -inkey ./certs/public.pem -pubin -in - | base64 > top_secret.enc".format(message)])
@@ -29,11 +30,12 @@ def run_command():
   # 
   # Recive encrypted message
   # 
-  encrypted_base64_payload = request.get_data()
-  value = decrypt_public_key(encrypted_base64_payload)
-  a = json.loads(value)
-  if a["accessToken"] != SERVER_ACCESS_TOKEN :
-    return "Unauthorized request"
+  if NEED_ACCESS_TOKEN :
+    encrypted_base64_payload = request.get_data()
+    value = decrypt_public_key(encrypted_base64_payload)
+    a = json.loads(value)
+    if a["accessToken"] != SERVER_ACCESS_TOKEN :
+      return "Unauthorized request"
 
   # 
   # Run command
