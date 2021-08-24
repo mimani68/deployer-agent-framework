@@ -2,6 +2,8 @@ FROM python:2.7-slim
 
 WORKDIR /app
 
+RUN apt update; apt install git curl docker.io
+
 ADD requriments.txt /app
 
 RUN pip install -r requriments.txt

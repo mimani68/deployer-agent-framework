@@ -3,6 +3,8 @@
 ## Installation
 
 ```bash
+python -m pip install --user virtualenv
+python -m venv venv
 pip install -r requriments.txt
 ```
 ## Run application
@@ -19,9 +21,13 @@ docker build -t deployer:1.0.0 .
 
 ```bash
 docker run \
+--rm \
 --name deployer \
 -e NEED_ACCESS_TOKEN="false" \
 -e SERVER_ACCESS_TOKEN="123" \
+-v /home/centos:/home/centos \
+-v /usr/bin/docker:/usr/bin/docker:ro \
+-v /var/run/docker.sock:/var/run/docker.sock:ro \
 -v ${PWD}/scripts:/app/scripts \
 -v ${PWD}/certs:/app/certs \
 -v ${PWD}/logs:/app/logs \
