@@ -62,6 +62,12 @@ curl -XPOST localhost:27514/?cmd=hello --data "$msg"
 
 ### Dockerized
 
+#### Build docker image
+```bash
+docker build -t deployer:1.0.0 .
+```
+#### usage of dockerfile
+
 ```bash
 docker run --rm \
 --name dep \

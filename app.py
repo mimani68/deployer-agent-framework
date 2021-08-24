@@ -46,7 +46,7 @@ def run_command():
   for executableFile in a:
     x = re.search("{}.sh".format(scriptInpit), executableFile)
     if x >= 0 :
+      print("./scripts/" + scriptInpit + ".sh")
       os.system("./scripts/" + scriptInpit + ".sh")
       return "DONE"
-    else:
-      return "FILAED"
+  return "FILAED"
