@@ -26,7 +26,6 @@ docker run \
 -e NEED_ACCESS_TOKEN="false" \
 -e SERVER_ACCESS_TOKEN="123" \
 -v /home/centos:/home/centos \
--v /usr/bin/docker:/usr/bin/docker:ro \
 -v /var/run/docker.sock:/var/run/docker.sock:ro \
 -v ${PWD}/scripts:/app/scripts \
 -v ${PWD}/certs:/app/certs \
