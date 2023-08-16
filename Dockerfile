@@ -4,9 +4,9 @@ WORKDIR /app
 
 RUN apt update; apt install -y git curl docker.io
 
-ADD requriments.txt /app
+ADD requirements.txt /app
 
-RUN pip install -r requriments.txt
+RUN pip install -r requirements.txt
 
 ADD . /app
 
