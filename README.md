@@ -37,14 +37,29 @@ deployer:1.0.0
 
 ## Usage
 
-### Standalone
+### Simple connection
+
+```bash
+curl -XPOST localhost:27514/?cmd=test
+```
+
+### Secure data transportation
+
+> [Create public and private keys](./rsa-encryption.md)
 
 Send request with `cURL`
 
 ```bash
-msg=`echo "{\"accessToken\":\"8X-i2x2t3M-X2-l0P5g5\"}" | openssl rsautl -encrypt -inkey public.pem -pubin -in - | base64`
+msg=`echo "{\"accessToken\":\"37109860-3c1b-11ee-8265-cba1ae806b41\"}" | openssl pkeyutl -encrypt -inkey public.pem -pubin -in - | base64`
 ```
+
+> Note: test your payload
+
+```bash
+echo "$msg" | base64 --decode - | openssl pkeyutl -decrypt -inkey private.pem -in -
+```
+
 And the send request
 ```bash
-curl -XPOST localhost:27514/?cmd=hello --data "$msg"
+curl -XPOST localhost:27514/?cmd=test --data "$msg"
 ```

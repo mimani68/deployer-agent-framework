@@ -1,35 +1,32 @@
 # Encryption
 
-## Certs
-
-### Generate a 2048 bit RSA Key
+## 1) Generate RSA Private Key
 You can generate a public and private RSA key pair like this:
 ```bash
-openssl genrsa -out private.pem 4096
+openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:4096
 ```
-or 
-```bash
-openssl genrsa -des3 -passout pass:me498yw98ry94ytrio -out private.pem 4096
-```
-or 
-```bash
-pwgen -N 1 -y 50 | openssl genrsa -des3 -passout stdin -out private.pem 4096
-```
-### Export the RSA Public Key to a File
+
+## 2) Export the RSA Public Key to a File
 
 This is a command that is
-
 ```bash
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ```
-### Encrypt message with public key
+
+## 3) Check the certificate
 
 ```bash
-echo "{\"accessToken\":\"8X20xd23-X2-l0P5g5\"}" | openssl rsautl -encrypt -inkey public.pem -pubin -in - | base64 > top_secret.enc
+openssl rsa -in private.pem -text -noout
 ```
 
-### Decrypt the file using a private key
+## 4) Encrypt message with public key
 
 ```bash
-cat top_secret.enc | base64 --decode - | openssl rsautl -decrypt -inkey private.pem -in -
+echo "{\"accessToken\":\"8X20xd23-X2-l0P5g5\"}" | openssl pkeyutl -encrypt -inkey public.pem -pubin -in - | base64 > encoded_text.enc
+```
+
+## 5) Decrypt the file using a private key
+
+```bash
+cat encoded_text.enc | base64 --decode - | openssl pkeyutl -decrypt -inkey private.pem -in -
 ```
