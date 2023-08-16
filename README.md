@@ -5,7 +5,7 @@
 ```bash
 python -m pip install --user virtualenv
 python -m venv venv
-pip install -r requriments.txt
+pip install -r requirements.txt
 ```
 ## Run application
 ```bash
@@ -37,13 +37,13 @@ deployer:1.0.0
 
 ## Usage
 
-### Simple connection
+### A) Simple connection
 
 ```bash
 curl -XPOST localhost:27514/?cmd=test
 ```
 
-### Secure data transportation
+### B) Secure data transportation
 
 > [Create public and private keys](./rsa-encryption.md)
 
