@@ -2,3 +2,4 @@
 *.log
 top_secret*
 __pycache__
+test-script-result.txt

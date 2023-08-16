@@ -4,6 +4,7 @@ import subprocess
 import json
 import os
 from flask import Flask, request
+
 from libs.directory.list import get_sh_files
 from libs.logs.log import info
 from libs.command.run import run_command
@@ -22,14 +23,14 @@ def decrypt_public_key(encrypted_message):
 app = Flask(__name__)
 
 # 
-# must send "SERVER_ACCESS_TOKEN" that encypted with rsa pair keys
+# must send "SERVER_ACCESS_TOKEN" that encrypted with rsa pair keys
 # 
 # curl localhost:3000/?cmd=hello --data "fjfdfighfey8gynhe8rt87eyt"
 # curl localhost:3000/?cmd=deploy --data "fjfdfighfey8gynhe8rt87eyt"
 # 
 @app.route("/", methods=['POST'])
 # @api_token_required
-def run_command():
+def remote_command_handler():
   # 
   # Receive encrypted message
   # 
@@ -54,10 +55,11 @@ def run_command():
     for executableFile in currentScriptsList:
       if script in executableFile:
         info("About to execute script ./scripts/" + script)
-        # os.system("./scripts/" + script)
         result = run_command("./scripts/" + script)
-        # return "DONE"
-        return result
-    return "FAILED"
+        return {
+          "status": "DONE",
+          "result": result
+        }
+    return { "status": "FAILED" }
   except:
-    return "FAILED"
+    return { "status": "FAILED" }
