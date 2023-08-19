@@ -10,9 +10,10 @@ RUN pip install -r requirements.txt
 
 ADD . /app
 
-RUN cd /app/certs; \
-openssl genrsa -out private.pem 4096; \
-openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+RUN mkdir /app/certs \
+    && cd /app/certs \
+    && openssl genrsa -out private.pem 4096 \
+    && openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 
 EXPOSE 27514
 
