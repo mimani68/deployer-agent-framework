@@ -41,7 +41,7 @@ deployer:1.0.0
 ### A) Simple connection
 
 ```bash
-curl -XPOST localhost:27514/?cmd=test
+curl -XPOST --header "Content-Type: application/json" http://localhost:27514/?cmd=test  --data '{"accessToken":"37109860-3c1b-11ee-8265-cba1ae806b41"}'
 ```
 
 ### B) Secure data transportation
@@ -62,5 +62,5 @@ echo "$msg" | base64 --decode - | openssl pkeyutl -decrypt -inkey private.pem -i
 
 And the send request
 ```bash
-curl -XPOST localhost:27514/?cmd=test --data "$msg"
+curl -XPOST --header "Content-Type: application/json" localhost:27514/?cmd=test --data "$msg"
 ```

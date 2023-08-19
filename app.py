@@ -13,6 +13,8 @@ from libs.encryption.secure import decrypt_public_key
 SERVER_ACCESS_TOKEN = os.getenv('SERVER_ACCESS_TOKEN')
 NEED_ACCESS_TOKEN = os.getenv('NEED_ACCESS_TOKEN') == 'true'
 
+info("Bootstrap")
+
 if NEED_ACCESS_TOKEN :
   info("Encryption mode activate.")
 
@@ -21,27 +23,35 @@ app = Flask(__name__)
 @app.route("/", methods=['POST'])
 # @api_token_required
 def remote_command_handler():
+  payload = {}
+
+  if request.content_length in [0, None]:
+    info("Payload is empty")
+    return { "message": "Payload is empty" }
+
   # 
   # Receive encrypted message
   # 
   if NEED_ACCESS_TOKEN :
-    encrypted_base64_payload = request.get_data()
-    value = decrypt_public_key(encrypted_base64_payload.decode('utf-8'))
+    value = decrypt_public_key(request.get_data().decode('utf-8'))
     if value['status'] == 'FAILED':
       info("Encrypted payload is invalid")
-      return "Unauthorized request"
-    currentScriptsList = json.loads(value['payload'])
-    if currentScriptsList["accessToken"] != SERVER_ACCESS_TOKEN :
-      info("Server Token ID is invalid")
-      return "Server Token is unrecognized."
+      return { "message": "Encrypted request needed." }
+    payload = json.loads(value['payload'].decode('utf-8').replace('\n', ''))
+  else:
+    payload = request.get_json()
 
+  if not 'accessToken' in payload or payload["accessToken"] != SERVER_ACCESS_TOKEN :
+    info("Server Token ID is invalid")
+    return { "message": "Server Token is unrecognized." }
+    
   scriptInputName = request.args.get('cmd')
   info("Request for scrip=" + scriptInputName)
   script = scriptInputName + ".sh"
   currentScriptsList = get_sh_files("./scripts")
   if len(currentScriptsList) == 0:
     info("Script directory is empty")
-    return "No script is exists"
+    return { "message": "No script is exists" }
   try:
     for executableFile in currentScriptsList:
       if script in executableFile:
