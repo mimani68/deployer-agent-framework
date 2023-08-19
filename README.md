@@ -58,7 +58,6 @@ docker build -t deployer:1.0.0 .
 mkdir ~/deployer && cd ~/deployer
 
 docker run \
---rm \
 --name deployer \
 -e NEED_ACCESS_TOKEN="false" \
 -e SERVER_ACCESS_TOKEN="37109860-3c1b-11ee-8265-cba1ae806b41" \

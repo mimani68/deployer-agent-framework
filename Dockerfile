@@ -2,7 +2,7 @@ FROM python:3.11
 
 WORKDIR /app
 
-RUN apt update; apt install -y git curl docker.io
+RUN apt update && apt install -y git curl
 
 ADD requirements.txt /app
 
