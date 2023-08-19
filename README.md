@@ -25,7 +25,7 @@ curl -XPOST --header "Content-Type: application/json" http://localhost:27514/?cm
 
 ### B) Secure data transportation
 
-> [Create public and private keys](./rsa-encryption.md)
+> [Create public and private keys](./docs/rsa-encryption.md)
 
 Send request with `cURL`
 
