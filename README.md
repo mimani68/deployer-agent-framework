@@ -55,16 +55,15 @@ docker build -t deployer:1.0.0 .
 #### C-2) Usage of dockerfile
 
 ```bash
-mkdir ~/deployer && cd ~/deployer
-
 docker run \
---name deployer \
--e NEED_ACCESS_TOKEN="false" \
--e SERVER_ACCESS_TOKEN="37109860-3c1b-11ee-8265-cba1ae806b41" \
--v /var/run/docker.sock:/var/run/docker.sock:ro \
--v ${PWD}/scripts:/app/scripts \
--v ${PWD}/certs:/app/certs \
--v ${PWD}/logs:/app/logs \
--p 27514:27514 \
-deployer:1.0.0
+    --name deployer \
+    -d \
+    -e NEED_ACCESS_TOKEN="false" \
+    -e SERVER_ACCESS_TOKEN="37109860-3c1b-11ee-8265-cba1ae806b41" \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    -v ${PWD}/scripts:/app/scripts \
+    -v ${PWD}/certs:/app/certs \
+    -v ${PWD}/logs:/app/logs \
+    -p 27514:27514 \
+    deployer:1.0.0
 ```
