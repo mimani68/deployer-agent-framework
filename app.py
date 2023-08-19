@@ -1,6 +1,9 @@
 import json
 import os
+from dotenv import load_dotenv
 from flask import Flask, request
+
+load_dotenv() 
 
 from libs.directory.list import get_sh_files
 from libs.logs.log import info
@@ -22,13 +25,14 @@ def remote_command_handler():
   # Receive encrypted message
   # 
   if NEED_ACCESS_TOKEN :
-    info("Encryption mode activate.")
     encrypted_base64_payload = request.get_data()
     value = decrypt_public_key(encrypted_base64_payload.decode('utf-8'))
     if value['status'] == 'FAILED':
+      info("Encrypted payload is invalid")
       return "Unauthorized request"
     currentScriptsList = json.loads(value['payload'])
     if currentScriptsList["accessToken"] != SERVER_ACCESS_TOKEN :
+      info("Server Token ID is invalid")
       return "Server Token is unrecognized."
 
   scriptInputName = request.args.get('cmd')
@@ -43,6 +47,7 @@ def remote_command_handler():
       if script in executableFile:
         info("About to execute script ./scripts/" + script)
         result = run_command("./scripts/" + script)
+        info(f"Response={ result }")
         return {
           "status": "DONE",
           "result": result

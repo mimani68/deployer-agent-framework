@@ -20,12 +20,13 @@ docker build -t deployer:1.0.0 .
 #### usage of dockerfile
 
 ```bash
+cd ~/deployer
+
 docker run \
 --rm \
 --name deployer \
 -e NEED_ACCESS_TOKEN="false" \
 -e SERVER_ACCESS_TOKEN="123" \
--v /home/centos:/home/centos \
 -v /var/run/docker.sock:/var/run/docker.sock:ro \
 -v ${PWD}/scripts:/app/scripts \
 -v ${PWD}/certs:/app/certs \
