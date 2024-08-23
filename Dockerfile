@@ -2,7 +2,7 @@ FROM docker:27-cli
 
 WORKDIR /app
 
-RUN apk add --no-cache python3 py3-pip git curl
+RUN apk add --no-cache python3 py3-pip git curl openssl
 
 ADD requirements.txt /app
 
