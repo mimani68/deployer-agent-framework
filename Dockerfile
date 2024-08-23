@@ -1,12 +1,12 @@
-FROM python:3.11
+FROM docker:27-cli
 
 WORKDIR /app
 
-RUN apt update && apt install -y git curl
+RUN apk add --no-cache python3 py3-pip git curl
 
 ADD requirements.txt /app
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --break-system-packages
 
 ADD . /app
 

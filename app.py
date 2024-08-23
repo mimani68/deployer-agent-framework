@@ -10,12 +10,12 @@ from libs.logs.log import info
 from libs.command.run import run_command
 from libs.encryption.secure import decrypt_public_key
 
-SERVER_ACCESS_TOKEN = os.getenv('SERVER_ACCESS_TOKEN')
-NEED_ACCESS_TOKEN = os.getenv('NEED_ACCESS_TOKEN') == 'true'
+ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+SECURE_CONNECTION = os.getenv('SECURE_CONNECTION') == 'true'
 
 info("Bootstrap")
 
-if NEED_ACCESS_TOKEN :
+if SECURE_CONNECTION :
   info("Encryption mode activate.")
 
 app = Flask(__name__)
@@ -32,7 +32,7 @@ def remote_command_handler():
   # 
   # Receive encrypted message
   # 
-  if NEED_ACCESS_TOKEN :
+  if SECURE_CONNECTION :
     value = decrypt_public_key(request.get_data().decode('utf-8'))
     if value['status'] == 'FAILED':
       info("Encrypted payload is invalid")
@@ -41,7 +41,7 @@ def remote_command_handler():
   else:
     payload = request.get_json()
 
-  if not 'accessToken' in payload or payload["accessToken"] != SERVER_ACCESS_TOKEN :
+  if not 'accessToken' in payload or payload["accessToken"] != ACCESS_TOKEN :
     info("Server Token ID is invalid")
     return { "message": "Server Token is unrecognized." }
     

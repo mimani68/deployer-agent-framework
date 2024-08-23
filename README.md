@@ -17,10 +17,10 @@ flask run --host=0.0.0.0 --port=27514
 
 ## Usage
 
-### A) Simple connection
+### A) Simple and Unsecure connection
 
 ```bash
-curl -XPOST --header "Content-Type: application/json" http://localhost:27514/?cmd=test  --data '{"accessToken":"37109860-3c1b-11ee-8265-cba1ae806b41"}'
+curl -XPOST --header "Content-Type: application/json" "http://localhost:27514/?cmd=test"  --data '{"accessToken":"37109860-3c1b-11ee-8265-cba1ae806b41"}'
 ```
 
 ### B) Secure data transportation
@@ -41,8 +41,7 @@ echo "$msg" | base64 --decode - | openssl pkeyutl -decrypt -inkey private.pem -i
 
 And the send request
 ```bash
-curl -XPOST --header "Content-Type: application/json" localhost:27514/?cmd=test --data "$msg"
-
+curl -XPOST --header "Content-Type: application/json" "http://localhost:27514/?cmd=test" --data "$msg"
 ```
 ### C) Docker-base
 
