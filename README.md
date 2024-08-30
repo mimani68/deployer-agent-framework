@@ -30,13 +30,13 @@ curl -XPOST --header "Content-Type: application/json" "http://localhost:27514/?c
 Send request with `cURL`
 
 ```bash
-msg=`echo "{\"accessToken\":\"37109860-3c1b-11ee-8265-cba1ae806b41\"}" | openssl pkeyutl -encrypt -inkey public.pem -pubin -in - | base64`
+msg=`echo "{\"accessToken\":\"76448262-5bef-416a-9c5a-9200c2300e82\"}" | openssl pkeyutl -encrypt -inkey public.pem -pubin -in - | base64 -w 0`
 ```
 
 > Note: test your payload
 
 ```bash
-echo "$msg" | base64 --decode - | openssl pkeyutl -decrypt -inkey private.pem -in -
+echo "$msg" | base64 -d - | openssl pkeyutl -decrypt -inkey private.pem -in -
 ```
 
 And the send request
