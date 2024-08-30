@@ -58,6 +58,7 @@ docker run \
     --name deployer \
     -d \
     -e SECURE_CONNECTION="false" \
+    -e RETRY_INTERVAL=10 \
     -e ACCESS_TOKEN="37109860-3c1b-11ee-8265-cba1ae806b41" \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     -v ${PWD}/tmp:/app/tmp \
@@ -65,5 +66,5 @@ docker run \
     -v ${PWD}/certs:/app/certs \
     -v ${PWD}/logs:/app/logs \
     -p 27514:27514 \
-    deployer:1.0.0
+    deployer:latest
 ```
